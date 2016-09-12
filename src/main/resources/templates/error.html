@@ -1,0 +1,25 @@
+<!-- Spring Boot lets you define your own error view instead of the Whitelabel error -->
+<!-- page that we saw earlier. It must have the name error and its purpose is to handle -->
+<!-- all exceptions. The default BasicErrorController class will expose a lot of useful -->
+<!-- model attributes that you can display on this page. -->
+<!-- A more advanced option to handle errors is to define your own implementation -->
+<!-- of the ErrorController class, a controller in charge of handling all the exceptions -->
+<!-- at a global level. Take a look at the ErrorMvcAutoConfiguration class and the -->
+<!-- BasicErrorController class, which is the default implementation. -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+<meta charset="UTF-8"/>
+<title th:text="${status}">404</title>
+<link href="/webjars/materializecss/0.96.0/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body>
+	<div class="row">
+	<h1 class="indigo-text center" th:text="${error}">Not found</h1>
+	<p class="col s12 center" th:text="${message}">
+	This page is not available
+	</p>
+	</div>
+</body>
+</html>
