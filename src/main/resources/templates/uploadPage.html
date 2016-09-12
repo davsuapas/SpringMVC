@@ -21,6 +21,9 @@ layout:decorator="layout">
 	</button>
 	</div>
 	</form>
+	<div class="col s12 center red-text" th:text="${error}"	th:if="${error}">
+	Error during upload
+	</div>	
 	</div>
 </body>
 </html>
