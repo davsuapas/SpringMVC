@@ -37,32 +37,25 @@ public class PictureUploadController {
 	// Multilenguaje
 	private final MessageSource messageSource; 
 	
+	private final UserProfileSession userProfileSession;
+	
 	@Autowired
-	public PictureUploadController(PictureUploadProperties uploadProperties, MessageSource messageSource) {
+	public PictureUploadController(PictureUploadProperties uploadProperties, MessageSource messageSource, UserProfileSession userProfileSession) {
 		picturesDir = uploadProperties.getUploadPath();
 		anonymousPicture = uploadProperties.getAnonymousPicture();
 		this.messageSource = messageSource;
+		this.userProfileSession = userProfileSession;
 	}	
-	
-	// Cuando se hace model.addAttribute("picturePath", new FileSystemResource(tempFile));
-	// el valor por defecto que se configuro en el constructor, es modificado con el valor
-	// que se a�ade con addAttribute, y se propaga a trav�s de los diferentes request porque
-	// se graba por sessi�n con @SessionAttributes("picturePath")
-	@ModelAttribute("picturePath")
-	public Resource picturePath() {
-		return anonymousPicture;
-	}	
-	
-	@RequestMapping("upload")
-	public String uploadPage() {
-		return "uploadPage";
-	}
 	
 	// Maneja todas las expcepciones de este controlador para el tipo ioexception
 	@ExceptionHandler(IOException.class)
 	public ModelAndView handleIOException(Locale locale) {
-		ModelAndView modelAndView = new ModelAndView("uploadPage");
+		
+		ModelAndView modelAndView = new ModelAndView("profilePage");
+		
 		modelAndView.addObject("error", messageSource.getMessage("upload.io.exception", null, locale));
+		modelAndView.addObject("profileForm", userProfileSession.toForm());
+		
 		return modelAndView;
 	}
 	
@@ -73,11 +66,12 @@ public class PictureUploadController {
 		ModelAndView modelAndView = new ModelAndView("uploadPage");
 	
 		modelAndView.addObject("error", request.getAttribute(WebUtils.ERROR_MESSAGE_ATTRIBUTE));
+		modelAndView.addObject("profileForm", userProfileSession.toForm());
 		
 		return modelAndView;
 	}	
 	
-	@RequestMapping(value = "/upload", method = RequestMethod.POST)
+	@RequestMapping(value = "/profile", method = RequestMethod.POST)
 	public String onUpload(MultipartFile file, Model model) throws IOException {
 				
 		String fileExtension = getFileExtension(file.getOriginalFilename());
@@ -89,9 +83,9 @@ public class PictureUploadController {
 			IOUtils.copy(in, out);
 		}
 
-		model.addAttribute("picturePath", new FileSystemResource(tempFile));
+		userProfileSession.setPicturePath(new FileSystemResource(tempFile));
 		
-		return "uploadPage";		
+		return "redirect:profile";		
 
 	}
 	
@@ -100,13 +94,15 @@ public class PictureUploadController {
 	}
 	
 	@RequestMapping(value = "/uploadedPicture")
-	public void getUploadedPicture(
-			HttpServletResponse response,
-			@ModelAttribute("picturePath") Resource picturePath) throws	IOException {
+	public void getUploadedPicture(HttpServletResponse response) throws	IOException {
 		
-		Path path = picturePath.getFile().toPath();
+		Resource picturePath = userProfileSession.getPicturePath();
 		
-		response.setHeader("Content-Type", URLConnection.guessContentTypeFromName(path.toString()));
-		Files.copy(path, response.getOutputStream());
+		if (picturePath == null) {
+			picturePath = anonymousPicture;
+		}
+		
+		response.setHeader("Content-Type", URLConnection.guessContentTypeFromName(picturePath.getFilename()));
+		IOUtils.copy(picturePath.getInputStream(), response.getOutputStream());
 	}	
 }
