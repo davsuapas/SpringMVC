@@ -5,8 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html;
 charset=UTF-8"/>
-<meta name="viewport" content="width=device-width, initialscale=
-1, maximum-scale=1.0, user-scalable=no"/>
+<meta name="viewport" content="width=device-width, initialscale=1, maximum-scale=1.0, user-scalable=no"/>
 <title>Default title</title>
 <link href="/webjars/materializecss/0.96.0/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
@@ -22,7 +21,7 @@ charset=UTF-8"/>
 </ul>
 </div>
 </nav>
-<div>
+<div sec:authorize="isAuthenticated()">
 You are logged as <b sec:authentication="name" /> with roles <span sec:authentication="authorities" />
 -
 <form th:action="@{/logout}" method="post" style="display: inline-block">

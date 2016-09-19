@@ -21,12 +21,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		
 		http
-			.httpBasic()
+			.formLogin()
+			.loginPage("/login") // <= custom login page
+			.defaultSuccessUrl("/profile")
 			.and()
-			.csrf().disable()
+			.logout().logoutSuccessUrl("/login")
+			.and()
 			.authorizeRequests()
-			.antMatchers("/login", "/logout").permitAll()
-			.antMatchers("/profile").hasRole("ADMIN")
+			.antMatchers("/webjars/**", "/login").permitAll()
 			.anyRequest().authenticated();
 	}	
 }
