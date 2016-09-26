@@ -36,6 +36,9 @@ dependencies {
 	compile 'org.springframework.boot:spring-boot-starter-security'
 	compile 'org.thymeleaf.extras:thymeleaf-extras-springsecurity4'
 	
+	compile 'org.springframework.boot:spring-boot-starter-redis'
+	compile 'org.springframework.session:spring-session:1.0.1.RELEASE'	
+	
 	testCompile('org.springframework.boot:spring-boot-starter-test') 
 }
 
