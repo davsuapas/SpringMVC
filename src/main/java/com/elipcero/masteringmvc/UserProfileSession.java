@@ -55,4 +55,8 @@ public class UserProfileSession implements Serializable {
 	public List<String> getTastes() {
 		return this.tastes;
 	}
+	
+	public void setTastes(List<String> value) {
+		this.tastes = value;
+	}
 }
