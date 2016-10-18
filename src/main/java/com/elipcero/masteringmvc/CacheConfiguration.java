@@ -27,3 +27,18 @@
 //			return cacheManager;
 //	}
 //}
+
+
+// Configuración par aun sistema distribuido
+//@Configuration
+//@Profile("redis")
+//@EnableRedisHttpSession
+//public class RedisConfig {
+//@Bean(name = "objectRedisTemplate")
+//public RedisTemplate objectRedisTemplate(RedisConnectionFactory
+//redisConnectionFactory) {
+//RedisTemplate<Object, Object> template = new
+//RedisTemplate<>();
+//template.setConnectionFactory(redisConnectionFactory);
+//return template;
+//}
