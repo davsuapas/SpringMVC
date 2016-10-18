@@ -3,6 +3,9 @@ package com.elipcero.masteringmvc;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.MatrixVariable;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,8 +15,22 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class SearchController {
 	
+	protected final Log logger = LogFactory.getLog(getClass());
+	
 	@RequestMapping("/search/{searchType}")
 	public ModelAndView search(@PathVariable String searchType, @MatrixVariable List<String> keywords) {
+	
+
+		ModelAndView modelAndView = new ModelAndView("resultPage");
+		modelAndView.addObject("tweets", this.getTweets());
+		modelAndView.addObject("search", String.join(",", keywords));
+		return modelAndView;
+	}
+	
+	@Cacheable("tweets")
+	public List<Tweet> getTweets() {
+		
+		logger.info("Entra getTweets");
 		
 		List<Tweet> tweets = new ArrayList<Tweet>();
 		
@@ -31,9 +48,6 @@ public class SearchController {
 		
 		tweets.add(tweet);
 		
-		ModelAndView modelAndView = new ModelAndView("resultPage");
-		modelAndView.addObject("tweets", tweets);
-		modelAndView.addObject("search", String.join(",", keywords));
-		return modelAndView;
+		return tweets;
 	}
 }
