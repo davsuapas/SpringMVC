@@ -1,4 +1,5 @@
-// Personaliza la configración de cache
+// Personaliza la configuración de cache. Si utilizas el manager por defecto
+// esto no es necesario
 
 //import java.util.concurrent.TimeUnit;
 //
