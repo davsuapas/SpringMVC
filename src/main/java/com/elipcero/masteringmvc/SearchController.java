@@ -28,7 +28,6 @@ public class SearchController {
 	
 
 		ModelAndView modelAndView = new ModelAndView("resultPage");
-		modelAndView.addObject("tweets", this.parallelSearchService.search(searchType, keywords));
 		modelAndView.addObject("search", String.join(",", keywords));
 		return modelAndView;
 	}
